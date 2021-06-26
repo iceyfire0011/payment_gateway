@@ -29,7 +29,21 @@ public class UserRepo implements IUserRepo {
 
     @Override
     public String createRange(List<User> users) throws SQLException {
-        return null;
+        Connection con = new DbConfig().openPGConnection();
+        var query = "INSERT INTO public.tbl_user(id, username, password, full_name) VALUES (?, ?, ?, ?);";
+        var s = "";
+        for (User u : users) {
+            var pstmt = con.prepareStatement(query);
+            pstmt.setString(1, UUID.randomUUID().toString());
+            pstmt.setString(2, u.getUsername());
+            pstmt.setString(3, u.getPassword());
+            pstmt.setString(4, u.getFullName());
+            pstmt.executeUpdate();
+            s += u.toString() + "\n";
+        }
+        con.close();
+
+        return s;
     }
 
     @Override

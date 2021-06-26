@@ -6,22 +6,29 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbConfig {
-    public static Connection pgCon;
-    public Connection openPGConnection(){
+    private String dbManager;
+    private String host;
+    private String port;
+    private String db;
+    private String username;
+    private String password;
+    public Connection openPGConnection() {
         try {
+            Connection pgCon;
+            dbManager = "postgresql";
+            host = "localhost";
+            port = "5432";
+            db = "payment_gateway";
+            username = "postgres";
+            password = "1234";
             Class.forName("org.postgresql.Driver");
             pgCon = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/payment_gateway", "postgres", "1234");
+                    "jdbc:" + dbManager + "://" + host + ":" + port + "/" + db, username, password);
             return pgCon;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    public void closeConnection(Connection con) throws SQLException {
-        con.close();
-    }
-
 
 }

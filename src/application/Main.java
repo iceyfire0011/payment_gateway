@@ -1,12 +1,10 @@
 package application;
 
 import model.User;
-import view.LoginForm;
+import view.swingGUI.LoginForm;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.UUID;
 
 public class Main {
     private static Connection con;

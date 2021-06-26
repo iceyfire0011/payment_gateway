@@ -1,14 +1,16 @@
-package view;
+package view.swingGUI;
 
 import iRepository.IUserRepo;
+import iService.IUserService;
 import model.User;
 import repository.UserRepo;
+import service.UserService;
+import view.viewModel.UserViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class RegistrationForm extends JFrame {
     JPasswordField password_text;
     JButton btnSubmit, btnCancel, btnLogin;
     GridLayout loginFormLayout;
-    IUserRepo iUserRepo;
+    IUserService iUserService;
 
     RegistrationForm() {
         //form header
@@ -73,23 +75,12 @@ public class RegistrationForm extends JFrame {
         btnSubmit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                User user = new User();
-                user.setUsername(userName_text.getText());
-                user.setPassword(new String(password_text.getPassword()));
-                user.setFullName(full_name_text.getText());
-                List<User> users = new LinkedList<>();
-                try {
-                    iUserRepo = new UserRepo();
-                    users = iUserRepo.userList();
-                    for (var existingUser : users) {
-                        if (existingUser.equals(user.getUsername())){
-                            return;
-                        }
-                    }
-                    iUserRepo.create(user);
-                } catch (Exception throwables) {
-                    throwables.printStackTrace();
-                }
+                UserViewModel userViewModel = new UserViewModel();
+                userViewModel.setUsername(userName_text.getText());
+                userViewModel.setPassword(new String(password_text.getPassword()));
+                userViewModel.setFullName(full_name_text.getText());
+                iUserService = new UserService();
+                iUserService.checkLogin(userViewModel);
 
             }
         });
